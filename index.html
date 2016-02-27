@@ -55,7 +55,7 @@
 		
 		var word = prompt("Введи слово: ");
 // 		var word = 'балда';
-		if (word.length % 2 == 0) {
+		while (word.length % 2 == 0) {
 			word = prompt("Слово должно состоять из нечетного количества символов: ");
 		}
 		var length = word.length;
