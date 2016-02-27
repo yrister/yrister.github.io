@@ -1,0 +1,314 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<style>
+/* 			* { margin: 0; margin-top: 10px;} */
+		</style>
+	</head>
+<body>
+	<center>
+	<canvas id="left"></canvas>
+	<canvas id="c"></canvas>
+	<canvas id="right"></canvas>
+	</center>
+	<center>
+	<input type="button" onclick="wrongWord()" value="Неправильно"/>
+	<input type="button" onclick="rightWord()" value="Засчитать слово"/>
+	</center>
+	<script>
+		var canvas = document.getElementById('c');
+		var ctx = canvas.getContext('2d');
+		
+		
+		var width = document.documentElement.clientWidth *  0.5;
+// 		width = width - width % 100;
+		canvas.width = canvas.height = width;
+		
+		var ctxPlayers = Array();
+		
+		var canLeft = document.getElementById('left');
+		ctxPlayers[0] = canLeft.getContext('2d');
+		canLeft.width = width * 0.3;
+		canLeft.height = width;
+			ctxPlayers[0].fillStyle = "#AAA";
+			ctxPlayers[0].fillRect(0, 0, canLeft.width, canLeft.height);
+		
+		
+		var canRight = document.getElementById('right');
+		ctxPlayers[1] = canRight.getContext('2d');
+		canRight.width = width * 0.3;
+		canRight.height = width;
+			ctxPlayers[1].fillStyle = "#EEE";
+			ctxPlayers[1].fillRect(0, 0, canRight.width, canRight.height);
+			
+			
+		ctx.fillStyle = "#000";
+		ctx.font = "normal " + (step * 0.80) + "pt TimesNewRoman";
+		ctx.textBaseline = "middle";
+		ctx.textAlign = "center";
+		ctxPlayers[0].fillText("cool", canLeft.width/2, step * 0.35);
+		
+		ctx.fillStyle = '#FFF';
+		//ctx.fillRect(0, 0, width, width);
+		
+		
+		
+		var word = prompt("Введи слово: ");
+// 		var word = 'балда';
+		if (word.length % 2 == 0) {
+			word = prompt("Слово должно состоять из нечетного количества символов: ");
+		}
+		var length = word.length;
+		var step = width / length;
+		
+		ctx.lineWidth = 1;
+		ctx.beginPath();
+		for (var i = 0; i < length + 1; i++) {
+			var del = (i == length ? -1 : 0) + (i == 0 ? 1 : 0);
+			
+			ctx.moveTo(i * step + del, 0);
+			ctx.lineTo(i * step + del, width);
+			
+			ctx.moveTo(0, i * step + del);
+			ctx.lineTo(width, i * step + del);
+		}
+		
+		ctx.strokeStyle = 'black';
+		ctx.stroke();
+
+		
+		var liters = new Array();
+		for (var i = 0; i < word.length * word.length; i++) {
+			liters[i] = "";
+		}
+
+		
+		function strokeLiterInPoint(x, y) {
+			makeTextStyle();
+			ctx.fillText(liters[x/step*word.length + y/step], x + step/2, y + step/2);
+			
+		}
+		function strokeLiterInIndex(index) {
+			makeTextStyle();
+			ctx.fillText(liters[index], XFromIndex(index) + step/2, YFromIndex(index) + step/2);
+			
+		}
+		function strokeAllLiter() {
+			makeTextStyle();
+			for (var i = 0; i < liters.length; i++) {
+				ctx.fillText(liters[i], i % word.length * step + step/2, step * (i - i % word.length) / word.length + step/2);
+			}
+		}
+		function makeTextStyle() {
+			ctx.fillStyle = "#000";
+			ctx.font = "normal " + (step * 0.80) + "pt TimesNewRoman";
+			ctx.textBaseline = "middle";
+			ctx.textAlign = "center";
+		}
+		
+		function clearScrin() {
+			ctx.fillStyle = "white";
+			ctx.fillRect(0, 0, width, width);
+			ctx.stroke();
+			strokeAllLiter();
+			countRedCell = 0;
+			makeWord = "";
+			indexOfLastChar = 0;
+			indexOfRed = -1;
+			strokeCounter = 0;
+			makingIndex = new Array();
+			strokeInRed = -1;
+		}
+		function clearScrinWarning() {
+			liters[indexOfRed] = "";
+			clearScrin()
+		}
+		
+		
+		var words = [];
+		function wrongWord() {
+			clearScrinWarning();
+		}
+		function rightWord() {
+			words[words.length] = makeWord;
+			
+			ctxPlayers[1 - words.length % 2].fillStyle = "#EEE";
+			ctxPlayers[1 - words.length % 2].fillRect(0, 0, canLeft.width, canLeft.height);
+			ctxPlayers[words.length % 2].fillStyle = "#AAA";
+			ctxPlayers[words.length % 2].fillRect(0, 0, canLeft.width, canLeft.height);
+			
+			var countChar = [0, 0];
+			
+			ctxPlayers[0].fillStyle = ctxPlayers[1].fillStyle = "#000";
+			ctxPlayers[0].font = ctxPlayers[1].font = "normal " + (step * 0.20) + "pt TimesNewRoman";
+			ctxPlayers[0].textBaseline = ctxPlayers[1].textBaseline = "top";
+			ctxPlayers[0].textAlign = ctxPlayers[1].textAlign = "center";
+			for (var i = 0; i < words.length; i++) {
+				ctxPlayers[i % 2].fillText(words[i], canLeft.width/2, (i - i % 2)/2 * step * 0.23);
+				countChar[i % 2] += words[i].length;
+			}
+			
+			ctxPlayers[0].fillText(countChar[0], canLeft.width/2, canLeft.height - step * 0.30);
+			ctxPlayers[1].fillText(countChar[1], canRight.width/2, canLeft.height - step * 0.30);
+			
+			clearScrin();
+		}
+		
+		
+		function drawRectInRect(x, y, color) {
+			var x0 = x + step/2	//The x-coordinate of the starting circle of the gradient
+			var y0 = y + step/2 //The y-coordinate of the starting circle of the gradient
+			var r0 = step * 0	//The radius of the starting circle
+			var x1 = x0			//The x-coordinate of the ending circle of the gradient
+			var y1 = y0			//The y-coordinate of the ending circle of the gradient
+			var r1 = step		//The radius of the ending circle
+			
+			var grd=ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+			grd.addColorStop(0,"white");
+			grd.addColorStop(1, color);
+			ctx.fillStyle = grd;
+			ctx.fillRect(x, y, step, step);
+		}
+		
+		
+		for (var i =  (liters.length - word.length) / 2; i < (liters.length - word.length) / 2 + word.length; i++) {
+// 			ctx.fillText(word.charAt(i), i * step + step/2, step * 3 - step/2);
+			liters[i] = word.charAt(i - (liters.length - word.length) / 2);
+		}
+		strokeAllLiter();
+		
+		
+		
+		function indexLitersFromPoint(x, y) {
+			return (x - x % step)/step + word.length * (y - y % step)/step;
+		}
+		function XFromIndex(index) {
+			return index % word.length * step;
+		}
+		function YFromIndex(index) {
+			return (index - index % word.length) / word.length *  step;
+		}
+		
+		String.prototype.replaceAt=function(index, character) {     
+			return this.substr(0, index) + character + this.substr(index+character.length);
+		} 
+
+		
+		
+		
+		var countRedCell = 0;
+		var indexOfLastChar = 0;
+		var indexOfRed = -1;
+		var makeWord = "";
+		var makingIndex = new Array();
+		var strokeCounter = 0;
+		var strokeInRed = -1;
+		
+		
+		addEventListener("click", function(event) {
+			
+			
+			
+			if (event.clientX < canvas.offsetLeft || event.clientX > canvas.offsetLeft + canvas.width || event.clientY < canvas.offsetTop || event.clientY > canvas.offsetTop + canvas.height) {
+				return;
+			}
+			
+			
+			
+			
+			var x = event.clientX - canvas.offsetLeft - event.layerX % step;
+			var y = event.clientY - canvas.offsetTop - event.layerY % step;
+			var indexOfLiters = indexLitersFromPoint(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+			var clickChar = liters[indexOfLiters];
+			
+			
+			var indexOfNewChar = indexOfLiters;
+			
+			if (indexOfLastChar != indexOfNewChar - 1 && indexOfLastChar != indexOfNewChar + 1 && indexOfLastChar != indexOfNewChar - word.length && indexOfLastChar != indexOfNewChar + word.length && (makeWord != "" || (indexOfRed != -1 && strokeCounter != 0))) {
+				return;
+			}
+			
+			if ((liters[indexOfNewChar - 1] == "" || indexOfLiters % word.length == 0) && (liters[indexOfNewChar + 1] == "" || indexOfLiters % word.length == word.length - 1) && (liters[indexOfLiters - word.length] == "" || indexOfLiters < word.length) && (liters[indexOfLiters + word.length] == "" || (indexOfLiters - indexOfLiters % word.length) / word.length + 1 == word.length)) {
+				return;
+			}
+			
+			var doReturn = false;
+			for (var i = 0; i < makingIndex.length; i++)
+				if (makingIndex[i] == indexOfLiters)
+					doReturn = true;
+			if (doReturn) return;
+			
+			
+			var color = "";
+			if (liters[indexOfLiters] == "") 
+				if (countRedCell == 0) {
+					countRedCell++;
+					color = "yellow";
+					indexOfRed = indexOfLiters;
+					makeWord += "*";
+					strokeInRed = strokeCounter;
+				}
+				else {
+					return;
+				}
+			else {
+				color = "green";
+				makeWord += clickChar;
+			}
+			
+			
+			indexOfLastChar = indexOfNewChar;
+			makingIndex[makingIndex.length] = indexOfLiters;
+			strokeCounter++;
+			
+			
+			
+			drawRectInRect(x, y, color);
+			
+			makeTextStyle();
+			if (liters[(x - x % step) / step + (y - y % step) / step * word.length] != "") {
+				ctx.fillText(clickChar, x + step/2, y + step/2);
+			}
+			
+			
+  		});
+  		
+		var replacer = {
+            "81":"й", "87":"ц", "69":"у", "82":"к", "84":"е", "89":"н", 
+			"85":"г", "73":"ш", "79":"щ", "80":"з", "219":"х", "221":"ъ", 
+			"65":"ф", "83":"ы", "68":"в", "70":"а", "71":"п", "72":"р", 
+			"74":"о", "75":"л", "76":"д", "186":"ж", "222":"э", "220":"ё", 
+			"90":"я", "88":"ч", "67":"с", "86":"м", "66":"и", "78":"т", 
+			"77":"ь", "188":"б", "190":"ю"
+        };
+
+  		
+  		addEventListener('keydown', function(event) {
+	  		if (countRedCell == 0 ) {
+		  		return;
+	  		}
+	  		if (indexOfRed == -1) {
+		  		return;
+	  		}
+	  		
+	  		var x = indexOfRed % word.length * step;
+	  		var y = (indexOfRed - indexOfRed % word.length) / word.length * step;
+	  		
+	  		
+// 	  		liters[indexOfRed] = String.fromCharCode(parseInt(event.keyIdentifier.substring(2, 6), 16)).toLowerCase();
+// 	  		strokeLiterInPoint(i % word.length, (i - i % word.length) / word.length);
+			
+			liters[indexOfRed] = replacer[event.which] != undefined ? replacer[event.which] : "";
+			
+			drawRectInRect(x, y, "yellow");
+			strokeLiterInIndex(indexOfRed);
+			
+			
+			makeWord = makeWord.replaceAt(strokeInRed, liters[indexOfRed]);
+			
+			
+  		});
+		
+	</script>
+</body>
+</html>
