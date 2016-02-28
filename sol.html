@@ -1,0 +1,77 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<style>
+/* 			* { margin: 0; margin-top: 10px;} */
+		</style>
+	</head>
+<body>
+	<center>
+	<canvas id="c"></canvas>
+	</center>
+	<script>
+		
+		var canvas = document.getElementById('c');
+		var ctx = canvas.getContext('2d');	
+		var width = canvas.width = document.documentElement.clientWidth * 0.8;
+		var height = canvas.height = document.documentElement.clientHeight * 0.8;
+		
+		var count = prompt("Enter number of object: ");
+		
+		var radius = (width < height ? width : height) * 0.3
+		var sideObj = (width < height ? width : height) * 0.01
+		var isFinished = false
+		
+		
+		var timerId = setInterval(doIt, 10)
+		function doIt() {
+			
+			isFinished = true
+			
+			ctx.fillStyle = "lightGray";
+			ctx.fillRect(0, 0, width, height);
+			
+			
+			for (var i = 0; i < count; i++) {
+			
+				var angle = 2*Math.PI/count * i + radius * 0.02
+
+				var newX = width/2 + Math.cos(angle) * radius
+				var newY = height/2 + Math.sin(angle) * radius
+				
+				if (newX > 0 && newX < width - sideObj && newY > 0 && newY < height - sideObj) {
+					isFinished = false
+				}
+				
+				if (newX < 0) {
+					newX = 0
+					newY = height/2 - Math.tan(angle) * width/2
+				}
+				if (newX > width - sideObj) {
+					newX = width - sideObj
+					newY = height/2 + Math.tan(angle) * (width - sideObj * 2)/2
+				}
+				if (newY < 0) {
+					newX = width/2 - Math.cos(angle) / Math.sin(angle) * height/2
+					newY = 0
+				}
+				if (newY > height - sideObj) {
+					newX = width/2 + Math.cos(angle) / Math.sin(angle) * (height - sideObj * 2)/2
+					newY = height - sideObj
+				}
+				
+				
+				ctx.fillStyle = "black";
+				ctx.fillRect(newX, newY, sideObj, sideObj);
+				
+			}
+			
+			radius++
+			
+			if (isFinished) clearInterval(timerId)
+		}
+		
+	</script>
+	
+</body>
+</html>
