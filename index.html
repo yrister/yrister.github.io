@@ -1,6 +1,5 @@
 <html>
 	<head>
-		<title>Балда на двоих</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<style>
 /* 			* { margin: 0; margin-top: 10px;} */
@@ -15,11 +14,17 @@
 	<center>
 	<input type="button" onclick="wrongWord()" value="Неправильно"/>
 	<input type="button" onclick="rightWord()" value="Засчитать слово"/>
+	<input type="button" onclick="returnBack()" value="Отменить"/>
 	</center>
 	<script>
 		var canvas = document.getElementById('c');
 		var ctx = canvas.getContext('2d');
 		
+		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		    // код для мобильных устройств
+		  } else {
+		    // код для обычных устройств
+		  }
 		
 		var width = document.documentElement.clientWidth *  0.5;
 // 		width = width - width % 100;
@@ -82,6 +87,7 @@
 		for (var i = 0; i < word.length * word.length; i++) {
 			liters[i] = "";
 		}
+		var oldIndex = []
 
 		
 		function strokeLiterInPoint(x, y) {
@@ -131,7 +137,28 @@
 			clearScrinWarning();
 		}
 		function rightWord() {
+			if (liters[indexOfRed] == "") {
+				return
+			}
+		
 			words[words.length] = makeWord;
+			
+			drawResult()
+			
+			oldIndex[oldIndex.length] = indexOfRed
+			clearScrin();
+		}
+		function returnBack() {
+			words.splice(words.length - 1, 1)
+			liters[oldIndex[oldIndex.length - 1]] = ""
+			oldIndex.splice(oldIndex.length - 1, 1)
+			
+			drawResult()
+			
+			clearScrinWarning();
+		}
+		
+		function drawResult() {
 			
 			ctxPlayers[1 - words.length % 2].fillStyle = "#EEE";
 			ctxPlayers[1 - words.length % 2].fillRect(0, 0, canLeft.width, canLeft.height);
@@ -152,7 +179,6 @@
 			ctxPlayers[0].fillText(countChar[0], canLeft.width/2, canLeft.height - step * 0.30);
 			ctxPlayers[1].fillText(countChar[1], canRight.width/2, canLeft.height - step * 0.30);
 			
-			clearScrin();
 		}
 		
 		
