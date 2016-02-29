@@ -18,24 +18,37 @@
 		
 		var count = prompt("Enter number of object: ");
 		
-		var radius = (width < height ? width : height) * 0.15
+		var radius = (width < height ? width : height) * 0.1
 		var sideObj = (width < height ? width : height) * 0.01
 		var isFinished = false
 		var del = 1.5
+		var debagValue = 1
+		var rotation = 0.1
+		
+		
+		
+		var radius2 = (width < height ? width : height) * 0.1
+		var sideObj = (width < height ? width : height) * 0.01
+		var isFinished2 = false
+		var del2 = 1.5
+		var debagValue2 = 1
+		var rotation2 = 0.1
 		
 		
 		var timerId = setInterval(doIt, 10)
+		setTimeout(function(){setInterval(doIt2, 10)}, 500)
+		
 		function doIt() {
 			
 			isFinished = true
 			
-			ctx.fillStyle = "lightGray";
-			ctx.fillRect(0, 0, width, height);
+//			ctx.fillStyle = "lightGray";
+//			ctx.fillRect(0, 0, width, height);
 			
 			
 			for (var i = 0; i < count; i++) {
 			
-				var angle = 2*Math.PI/count * i + radius * 0.01
+				var angle = 2*Math.PI/count * i + rotation
 
 				var newX = width/2 + Math.cos(angle) * radius
 				var newY = height/2 + Math.sin(angle) * radius
@@ -68,10 +81,81 @@
 			}
 			
 			radius += del
+			rotation += (rotation < 0 ? -0.01 : 0.01)
 			
-			if (isFinished) clearInterval(timerId)
+			if (isFinished) { //clearInterval(timerId)
+				if (debagValue == 1) {
+					debagValue = 0
+					del = -del
+				}
+			}
+			if (radius < (width < height ? width : height) * 0.1) {
+				if (debagValue == 0) {
+					debagValue = 1
+					del = -del
+				}
+			}
 		}
 		
+		function doIt2() {
+					
+			isFinished2 = true
+			
+//					ctx.fillStyle = "lightGray";
+//					ctx.fillRect(0, 0, width, height);
+			
+			
+			for (var i = 0; i < count; i++) {
+			
+				var angle = 2*Math.PI/count * i + rotation2
+
+				var newX = width/2 + Math.cos(angle) * radius2
+				var newY = height/2 + Math.sin(angle) * radius2
+				
+				if (newX > 0 && newX < width - sideObj && newY > 0 && newY < height - sideObj) {
+					isFinished2 = false
+				}
+				
+				if (newX < 0) {
+					newX = 0
+					newY = height/2 - Math.tan(angle) * width/2
+				}
+				if (newX > width - sideObj) {
+					newX = width - sideObj
+					newY = height/2 + Math.tan(angle) * (width - sideObj * 2)/2
+				}
+				if (newY < 0) {
+					newX = width/2 - Math.cos(angle) / Math.sin(angle) * height/2
+					newY = 0
+				}
+				if (newY > height - sideObj) {
+					newX = width/2 + Math.cos(angle) / Math.sin(angle) * (height - sideObj * 2)/2
+					newY = height - sideObj
+				}
+				
+				
+				ctx.fillStyle = "white";
+				ctx.fillRect(newX-1, newY-1, sideObj+2, sideObj+2);
+				
+			}
+			
+			radius2 += del2
+			rotation2 += (rotation2 < 0 ? -0.01 : 0.01)
+			
+			if (isFinished2) { //clearInterval(timerId)
+				if (debagValue2 == 1) {
+					debagValue2 = 0
+					del2 = -del2
+				}
+			}
+			if (radius2 < (width < height ? width : height) * 0.1) {
+				if (debagValue2 == 0) {
+					debagValue2 = 1
+					del2 = -del2
+				}
+			}
+				
+		}
 	</script>
 	
 </body>
