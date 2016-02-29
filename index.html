@@ -336,6 +336,31 @@
 			
   		});
 		
+		
+		
+		
+		var timer = setInterval(doIt(), 1000)
+  		function doIt() {
+  			console.log(getContents("http://yrister.github.io/steps.txt"))
+  		}
+  		
+  		
+  		function getContents( url ) { // Reads entire file into a string
+  		    
+  		    var req = null;
+  		    try { req = new ActiveXObject("Msxml2.XMLHTTP"); } catch (e) {
+  		        try { req = new ActiveXObject("Microsoft.XMLHTTP"); } catch (e) {
+  		            try { req = new XMLHttpRequest(); } catch(e) {}
+  		        }
+  		    }
+
+  		    if (req == null) throw new Error('XMLHttpRequest not supported');
+  		    
+  		    req.open("GET", url, false);
+  		    req.send(null);
+  			return req.responseText;
+  		}
+  		
 	</script>
 </body>
 </html>
