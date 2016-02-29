@@ -1,6 +1,6 @@
 <?php
 
-  echo("good");
+  echo "good";
   $name1 = fopen("text1.txt", "a");
     //"a" -говорит о ДОзаписи
     //"w" - о переписывании всего
