@@ -18,9 +18,10 @@
 		
 		var count = prompt("Enter number of object: ");
 		
-		var radius = (width < height ? width : height) * 0.3
+		var radius = (width < height ? width : height) * 0.15
 		var sideObj = (width < height ? width : height) * 0.01
 		var isFinished = false
+		var del = 1
 		
 		
 		var timerId = setInterval(doIt, 10)
@@ -66,9 +67,10 @@
 				
 			}
 			
-			radius++
+			radius += del
 			
-			if (isFinished) clearInterval(timerId)
+			if (isFinished) del *= -1 //clearInterval(timerId)
+			if (radius < (width < height ? width : height) * 0.15) del *= -1
 		}
 		
 	</script>
