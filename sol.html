@@ -21,7 +21,7 @@
 		var radius = (width < height ? width : height) * 0.15
 		var sideObj = (width < height ? width : height) * 0.01
 		var isFinished = false
-		var del = 1
+		var del = 1.5
 		
 		
 		var timerId = setInterval(doIt, 10)
@@ -35,7 +35,7 @@
 			
 			for (var i = 0; i < count; i++) {
 			
-				var angle = 2*Math.PI/count * i// + radius * 0.02
+				var angle = 2*Math.PI/count * i + radius * 0.01
 
 				var newX = width/2 + Math.cos(angle) * radius
 				var newY = height/2 + Math.sin(angle) * radius
