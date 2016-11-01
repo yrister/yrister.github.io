@@ -60,6 +60,53 @@
 		}
 		console.log(streemNumber(1600))
 		
+		function arrAgregator(C, arr, f) {
+			var result = [][]
+			for (var i = 0; i < C.length: i++)
+			for (var j = 0; j < C[i].length: j++) {
+				if C[i][j] == 1
+					result[i][j] = f(arr[i][j])
+				else
+					result[i][j] = 0
+			}
+			return result
+			
+		}
+		
+		var v = function(Y) {
+			return streemNumber(Y)
+		}
+		
+		var a = function(N) {
+			var a0 = 85.6
+			return N * a0
+    		}
+		var b = function(a) {
+			var L = 200
+			var T = 50
+			return a + L/T
+		}
+		
+		function V(C, Y) {
+			return arrAgregator(C, Y, v)
+		}
+		
+		//a[i][j] = N[i][j] * a0, C[i][j] == 1
+		//a[i][j] = 0, 		  C[i][j] != 1
+		//C - алгоритм флойда
+		function A(C, V) {
+			return arrAgregator(C, V, a)
+		}
+		
+		//b[i][j] = N[i][j] * a0, C[i][j] == 1
+		//b[i][j] = 0, 		  C[i][j] != 1
+		//C - алгоритм флойда
+		function B(C, A) {
+			return arrAgregator(C, A, b)
+		}
+		
+
+		
 	</script>
 </body>
 </html>
