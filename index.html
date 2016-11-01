@@ -121,6 +121,37 @@
 [9, 10, 9, 10, 11, 6, 11, 8, 9, 10, 11, 12]
 ]
 		
+		function findNodesForEdges() {
+			var res = [[[]]]
+			for (var i = 0; i < Floid.length; i++)
+			for (var j = 0; i < Floid[i].length; i++) {
+				var f = function(a, b) {
+					if (a != b)
+						res[a][Floid[a][b]].push(i)
+					f(Floid[a][b], b)
+				}
+				f(i, j)
+			}
+			return res
+		}
+		function findSummForEdjes(n, arr) {
+			var res = [[]]
+			for (var i = 0; i < Floid.length; i++)
+			for (var j = 0; i < Floid[i].length; i++) {
+				var sum = 0
+				var n = []
+				for (var k = 0; k < arr.length; k++) {
+					var nod = arr[i][j][k]
+					if (!n.includes(nod)) {
+						n.push(nod)
+						sum += n[nod]
+					}
+				}
+				res[i][j] = sum
+			}
+		}
+		findSummForEdjes([[]], findNodesForEdges())
+		
 		var Y = arrAgregator(C, null, y1)
 		var V = arrAgregator(C, Y, v)
 		var A = arrAgregator(C, V, a)
