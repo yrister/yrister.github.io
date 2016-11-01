@@ -47,7 +47,7 @@
 			var minV = 0
 			var p = 0.02
 			var error = 0.001
-			for (v = 1; v < 100000; v++) {
+			for (v = 1; v < 1000; v++) {
 				var r = erlang(v, y)
 				if (p > r && Math.abs(p - r) < minErr)
 					minErr = Math.abs(p - r)
