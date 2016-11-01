@@ -139,11 +139,11 @@
 			for (var i = 0; i < Floid.length; i++)
 			for (var j = 0; i < Floid[i].length; i++) {
 				var sum = 0
-				var n = []
+				var p = []
 				for (var k = 0; k < arr.length; k++) {
 					var nod = arr[i][j][k]
-					if (!n.includes(nod)) {
-						n.push(nod)
+					if (!p.includes(nod)) {
+						p.push(nod)
 						sum += n[nod]
 					}
 				}
