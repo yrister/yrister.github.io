@@ -42,17 +42,20 @@
 			return p
 		}
 		function streemNumber(y) {
-			var minV = Number.MAX_VALUE
+			var v = 0
+			var minErr = Number.MAX_VALUE
+			var minV = 0
 			var p = 0.02
 			var error = 0.001
-			for (var v = 1; v < 1000; v++) {
+			for (v = 1; v < 1000; v++) {
 				var r = erlang(v, y)
-				if (Math.abs(p - r) < minV)
+				if (Math.abs(p - r) < minErr)
+					minErr = Math.abs(p - r)
 					minV = v
 				if (Math.abs(p - r) <= error)
 					break
 			}
-			return minV
+			return v < minV ? v : minV
 		}
 		console.log(streemNumber(10))
 		
