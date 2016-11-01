@@ -42,12 +42,11 @@
 			return p
 		}
 		function streemNumber(y) {
-			var v = 1
 			var minV = 0
 			var p = 0.02
 			var error = 0.001
-			for (v = 1; v < 1000; v++) {
-				var r = erl(v, y)
+			for (var v = 1; v < 1000; v++) {
+				var r = ererlangl(v, y)
 				if (Math.abs(p - r) < minV)
 					minV = v
 				if (Math.abs(p - r) <= error)
