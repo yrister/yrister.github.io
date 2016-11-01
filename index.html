@@ -3,7 +3,32 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	</head>
 <body>
-	<script>function k(n) {
+	<script>
+		var lambda = 600
+		var p = 0.02
+		var error = 0.001
+
+		for (var i = 1; i < 1000; i++) {
+			var r = erlang(lambda, i)
+
+// 			console.log(i, r)
+			if (Math.abs(p - r) <= error)
+				break
+		}
+
+
+		function erlang(y, v) {
+			var p = 0
+			for (var i = 1; i <= v; i++) {
+				if (i == 1)
+					p = y / (1 + y)
+				else
+					p = y * p / (i + y * p)
+			}
+			return p
+		}
+		
+		function k(n) {
 			var sum = 0
 			for (var i = 0; i < n.length; i++) {
 				sum += n[i]
@@ -14,12 +39,12 @@
 			}
 			return result
 		}
-// 		console.log(k([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
+		console.log(k([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
 		
 		function T(lambda, myu) {
 			return 1/myu / (1 - lambda/myu)
 		}
-// 		console.log(T(5, 2))
+		console.log(T(5, 2))
 		
 		function fac(n) {
 			if (n == 1 || n == 0)
@@ -34,7 +59,7 @@
 				sum += Math.pow(y, i) / fac(i)
 			return  Math.pow(y, v) / fac(v) / sum
 		}
-		console.log(fac(-1), fac(1), fac(2), fac(5))
+		console.log(p(10, 4))
 		
 	</script>
 </body>
