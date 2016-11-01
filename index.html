@@ -14,12 +14,27 @@
 			}
 			return result
 		}
-		//console.log(k([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
+// 		console.log(k([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]))
 		
 		function T(lambda, myu) {
 			return 1/myu / (1 - lambda/myu)
 		}
-		console.log(T(5, 2))
+// 		console.log(T(5, 2))
+		
+		function fac(n) {
+			if (n == 1 || n == 0)
+				return 1
+			if (n < 0)
+				return null
+			return n * fac(n - 1)
+		}
+		function p(v, y) {
+			var sum = 0
+			for (var i = 0; i <= v; i++)
+				sum += Math.pow(y, i) / fac(i)
+			return  Math.pow(y, v) / fac(v) / sum
+		}
+		console.log(fac(0), fac(1), fac(2), fac(5))
 		
 	</script>
 </body>
