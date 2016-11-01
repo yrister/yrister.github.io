@@ -4,29 +4,6 @@
 	</head>
 <body>
 	<script>
-		var lambda = 600
-		var p = 0.02
-		var error = 0.001
-
-		for (var i = 1; i < 1000; i++) {
-			var r = erlang(lambda, i)
-
-// 			console.log(i, r)
-			if (Math.abs(p - r) <= error)
-				break
-		}
-
-
-		function erlang(y, v) {
-			var p = 0
-			for (var i = 1; i <= v; i++) {
-				if (i == 1)
-					p = y / (1 + y)
-				else
-					p = y * p / (i + y * p)
-			}
-			return p
-		}
 		
 		function k(n) {
 			var sum = 0
@@ -46,20 +23,39 @@
 		}
 		console.log(T(5, 2))
 		
-		function fac(n) {
+		function fack(n) {
 			if (n == 1 || n == 0)
 				return 1
 			if (n < 0)
 				return null
 			return n * fac(n - 1)
 		}
-		function erl(v, y) {
-			var sum = 0
-			for (var i = 0; i <= v; i++)
-				sum += Math.pow(y, i) / fac(i)
-			return  Math.pow(y, v) / fac(v) / sum
+		
+		function erlang(v, y) {
+			var p = 0
+			for (var i = 1; i <= v; i++) {
+				if (i == 1)
+					p = y / (1 + y)
+				else
+					p = y * p / (i + y * p)
+			}
+			return p
 		}
-		console.log(erl(10, 4))
+		function streemNumber(y) {
+			var v = 1
+			var minV = 0
+			var p = 0.02
+			var error = 0.001
+			for (v = 1; v < 1000; v++) {
+				var r = erl(v, y)
+				if (Math.abs(p - r) < minV)
+					minV = v
+				if (Math.abs(p - r) <= error)
+					break
+			}
+			return minV
+		}
+		console.log(streemNumber(10))
 		
 	</script>
 </body>
