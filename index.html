@@ -53,13 +53,13 @@
 				return null
 			return n * fac(n - 1)
 		}
-		function p(v, y) {
+		function erl(v, y) {
 			var sum = 0
 			for (var i = 0; i <= v; i++)
 				sum += Math.pow(y, i) / fac(i)
 			return  Math.pow(y, v) / fac(v) / sum
 		}
-		console.log(p(10, 4))
+		console.log(erl(10, 4))
 		
 	</script>
 </body>
